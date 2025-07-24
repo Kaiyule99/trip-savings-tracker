@@ -1,0 +1,43 @@
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f0f8ff;
+  margin: 0;
+  padding: 20px;
+}
+
+.container {
+  max-width: 400px;
+  margin: auto;
+  background: #ffffff;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+  text-align: center;
+  color: #0077b6;
+}
+
+p {
+  font-size: 18px;
+  margin: 8px 0;
+}
+
+#checkboxes {
+  margin-top: 20px;
+}
+
+.checkbox-wrapper {
+  margin-bottom: 15px;
+}
+
+.checkbox-wrapper label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.checkbox-wrapper input[type="checkbox"] {
+  transform: scale(1.3);
+}
