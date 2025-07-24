@@ -1,40 +1,96 @@
-window.onload = function () {
-  const goalAmount = 10000;
+const trackers = [
+  {
+    name: "Bday ni Bub",
+    emoji: "🎂",
+    goalAmount: 10000,
+    startDate: new Date("2025-08-01"),
+    endDate: new Date("2025-10-01"),
+    containerId: "bub-tracker"
+  },
+  {
+    name: "Boracay",
+    emoji: "🌴",
+    goalAmount: 30000,
+    startDate: new Date("2024-08-01"),
+    endDate: new Date("2025-06-01"),
+    containerId: "boracay-tracker"
+  },
+  {
+    name: "Taiwan",
+    emoji: "✈️",
+    goalAmount: 50000,
+    startDate: new Date("2025-12-01"),
+    endDate: new Date("2026-12-01"),
+    containerId: "taiwan-tracker"
+  }
+];
+
+trackers.forEach(tracker => {
   let currentSaved = 0;
 
-  const months = [
-    "January", "February", "March", "April", "May", "June",
-    "July", "August", "September", "October", "November", "December"
-  ];
+  const container = document.getElementById(tracker.containerId);
 
-  const checkboxContainer = document.getElementById("checkboxes");
-  const remainingDisplay = document.getElementById("remaining-amount");
-  const paidDisplay = document.getElementById("paid-amount");
+  const title = document.createElement("h1");
+  title.textContent = `${tracker.emoji} ${tracker.name} Tracker`;
+  container.appendChild(title);
 
-  months.forEach((month, i) => {
-    const wrapper = document.createElement("div");
-    wrapper.className = "checkbox-wrapper";
+  const goalDisplay = document.createElement("p");
+  goalDisplay.innerHTML = `Goal: ₱<span id="${tracker.containerId}-goal">${tracker.goalAmount}</span>`;
+  container.appendChild(goalDisplay);
 
-    const label = document.createElement("label");
-    label.textContent = `${month}: ₱1,000`;
+  const paidDisplay = document.createElement("p");
+  paidDisplay.innerHTML = `Amount Paid So Far: ₱<span id="${tracker.containerId}-paid">0</span>`;
+  container.appendChild(paidDisplay);
+
+  const remainingDisplay = document.createElement("p");
+  remainingDisplay.innerHTML = `Remaining: ₱<span id="${tracker.containerId}-remaining">${tracker.goalAmount}</span>`;
+  container.appendChild(remainingDisplay);
+
+  const checkboxContainer = document.createElement("div");
+  container.appendChild(checkboxContainer);
+
+  const months = [];
+  const current = new Date(tracker.startDate);
+  const end = new Date(tracker.endDate);
+
+  while (current <= end) {
+    months.push(new Date(current));
+    current.setMonth(current.getMonth() + 1);
+  }
+
+  const amountPerMonth = tracker.goalAmount / months.length;
+
+  months.forEach((date, index) => {
+    const monthYear = date.toLocaleString('default', { month: 'long', year: 'numeric' });
 
     const checkbox = document.createElement("input");
     checkbox.type = "checkbox";
-    checkbox.value = 1000;
-    checkbox.id = `month-${i + 1}`;
+    checkbox.value = amountPerMonth.toFixed(2);
+    checkbox.id = `${tracker.containerId}-month-${index}`;
+
+    const label = document.createElement("label");
+    label.htmlFor = checkbox.id;
+    label.textContent = `${monthYear}: ₱${amountPerMonth.toFixed(2)}`;
+
+    const wrapper = document.createElement("div");
+    wrapper.classList.add("checkbox-wrapper");
+    wrapper.appendChild(checkbox); // checkbox on left
+    wrapper.appendChild(label);
 
     checkbox.addEventListener("change", () => {
-      currentSaved += checkbox.checked ? 1000 : -1000;
-      updateDisplay();
+      if (checkbox.checked) {
+        currentSaved += parseFloat(checkbox.value);
+      } else {
+        currentSaved -= parseFloat(checkbox.value);
+      }
+      updateDisplays();
     });
 
-    wrapper.appendChild(label);
-    wrapper.appendChild(checkbox);
     checkboxContainer.appendChild(wrapper);
   });
 
-  function updateDisplay() {
-    remainingDisplay.textContent = goalAmount - currentSaved;
-    paidDisplay.textContent = currentSaved;
+  function updateDisplays() {
+    document.getElementById(`${tracker.containerId}-paid`).textContent = currentSaved.toFixed(2);
+    document.getElementById(`${tracker.containerId}-remaining`).textContent = (tracker.goalAmount - currentSaved).toFixed(2);
   }
-};
+});
