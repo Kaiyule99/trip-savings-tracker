@@ -11,8 +11,8 @@ const trackers = [
     name: "Boracay",
     emoji: "🌴",
     goalAmount: 30000,
-    startDate: new Date("2024-11-01"), // updated start date
-    endDate: new Date("2025-06-01"),   // updated end date
+    startDate: new Date("2024-11-01"), // updated start
+    endDate: new Date("2025-06-01"),   // updated end
     containerId: "boracay-tracker"
   },
   {
@@ -45,6 +45,16 @@ trackers.forEach(tracker => {
   const remainingDisplay = document.createElement("p");
   remainingDisplay.innerHTML = `Remaining: ₱<span id="${tracker.containerId}-remaining">${tracker.goalAmount}</span>`;
   container.appendChild(remainingDisplay);
+
+  // 🟦 Add progress bar
+  const progressBarContainer = document.createElement("div");
+  progressBarContainer.classList.add("progress-bar-container");
+
+  const progressBar = document.createElement("div");
+  progressBar.classList.add("progress-bar");
+
+  progressBarContainer.appendChild(progressBar);
+  container.appendChild(progressBarContainer);
 
   const checkboxContainer = document.createElement("div");
   container.appendChild(checkboxContainer);
@@ -84,7 +94,7 @@ trackers.forEach(tracker => {
       currentSaved += parseFloat(checkbox.value);
     }
 
-    // Save state to localStorage on change
+    // Save state on change
     checkbox.addEventListener("change", () => {
       localStorage.setItem(checkbox.id, checkbox.checked);
       if (checkbox.checked) {
@@ -101,7 +111,8 @@ trackers.forEach(tracker => {
   function updateDisplays() {
     document.getElementById(`${tracker.containerId}-paid`).textContent = currentSaved.toFixed(2);
     document.getElementById(`${tracker.containerId}-remaining`).textContent = (tracker.goalAmount - currentSaved).toFixed(2);
+    progressBar.style.width = `${(currentSaved / tracker.goalAmount) * 100}%`;
   }
 
-  updateDisplays(); // Initial update on load
+  updateDisplays(); // Initial update
 });
