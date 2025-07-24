@@ -74,10 +74,19 @@ trackers.forEach(tracker => {
 
     const wrapper = document.createElement("div");
     wrapper.classList.add("checkbox-wrapper");
-    wrapper.appendChild(checkbox); // checkbox on left
+    wrapper.appendChild(checkbox);
     wrapper.appendChild(label);
 
+    // Restore checkbox state from localStorage
+    const savedState = localStorage.getItem(checkbox.id);
+    if (savedState === "true") {
+      checkbox.checked = true;
+      currentSaved += parseFloat(checkbox.value);
+    }
+
+    // Save state on change
     checkbox.addEventListener("change", () => {
+      localStorage.setItem(checkbox.id, checkbox.checked);
       if (checkbox.checked) {
         currentSaved += parseFloat(checkbox.value);
       } else {
@@ -93,4 +102,6 @@ trackers.forEach(tracker => {
     document.getElementById(`${tracker.containerId}-paid`).textContent = currentSaved.toFixed(2);
     document.getElementById(`${tracker.containerId}-remaining`).textContent = (tracker.goalAmount - currentSaved).toFixed(2);
   }
+
+  updateDisplays(); // Initial update
 });
