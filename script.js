@@ -11,8 +11,8 @@ const trackers = [
     name: "Boracay",
     emoji: "🌴",
     goalAmount: 30000,
-    startDate: new Date("2024-08-01"),
-    endDate: new Date("2025-06-01"),
+    startDate: new Date("2024-11-01"), // updated start date
+    endDate: new Date("2025-06-01"),   // updated end date
     containerId: "boracay-tracker"
   },
   {
@@ -84,7 +84,7 @@ trackers.forEach(tracker => {
       currentSaved += parseFloat(checkbox.value);
     }
 
-    // Save state on change
+    // Save state to localStorage on change
     checkbox.addEventListener("change", () => {
       localStorage.setItem(checkbox.id, checkbox.checked);
       if (checkbox.checked) {
@@ -103,5 +103,5 @@ trackers.forEach(tracker => {
     document.getElementById(`${tracker.containerId}-remaining`).textContent = (tracker.goalAmount - currentSaved).toFixed(2);
   }
 
-  updateDisplays(); // Initial update
+  updateDisplays(); // Initial update on load
 });
